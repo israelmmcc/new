@@ -16,7 +16,7 @@ if(!$_SESSION["validar"]){
 			<tr>
 				<th>Id</th>
 				<th>Carrera</th>
-				<th>Materias</th>
+			     <th>Agregar Materia</th>
 			    <th>¿Detalles?</th>
 				<th>¿Eliminar?</th>
 			</tr>

@@ -53,6 +53,29 @@ class Datos extends Conexion{
 
 	}
 
+
+
+			#REGISTRO DE MATERIA EN GRUPO
+	#-------------------------------------
+	public function registroMateriaXGrupoModel($datosModel){
+
+		$stmt1 = Conexion::conectar()->prepare("INSERT INTO materias_grupos (idgrupo, idmateria) VALUES (:idgrupo,:idmateria)");	
+		
+		$stmt1->bindParam(":idgrupo", $datosModel["idgrupo"], PDO::PARAM_INT);
+		$stmt1->bindParam(":idmateria",$datosModel["idmateria"], PDO::PARAM_INT);
+		
+
+		if($stmt1->execute()){
+			return "success";
+		}
+		else{
+			return "error";
+		}
+
+		$stmt1->close();
+
+	}
+
 		#REGISTRO DE ALUMNO EN MATERIA
 	#-------------------------------------
 	public function registroAlumnoXMateriaModel($datosModel){
@@ -74,6 +97,37 @@ class Datos extends Conexion{
 
 	}
 
+		#BORRAR ALUMNOXMATERIA
+	#------------------------------------
+	public function borrarMateriaXGrupoModel($datosModel){
+		$stmt = Conexion::conectar()->prepare("DELETE FROM materias_grupos WHERE idgrupo=:idgrupo AND idmateria=:idmateria");
+
+		$stmt->bindParam(":idgrupo", $datosModel["id"], PDO::PARAM_INT);
+		$stmt->bindParam(":idmateria", $datosModel["idmateria"], PDO::PARAM_INT);
+
+		if($stmt->execute())
+			return "success";
+		else
+			return "error";
+
+		$stmt->close();
+
+	}
+
+	
+#vistaMateriasXGrupoModel
+	#-------------------------------------
+	#Obtiene las materias de toda la tabla
+	public function vistaMateriasXGrupoModel($tabla){
+
+		$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");	
+		$stmt->execute();
+
+		return $stmt->fetchAll();
+
+		$stmt->close();
+
+	}
 
 		#vistaMateriasXCarreraModel
 	#-------------------------------------
@@ -87,13 +141,30 @@ class Datos extends Conexion{
 		return $stmt->fetchAll();
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////
+
+		#vistaMateriaAñadModel
+	#-------------------------------------
+	#Obtiene las alumnos de toda la tabla
+	public function vistaMateriaAñadModel($idgrupo, $idmateria){
+	
+		$stmt = Conexion::conectar()->prepare("SELECT * FROM materias_grupos where idgrupo=:idgrupo AND idmateria=:idmateria");
+
+		$stmt->bindParam(":idgrupo", $idgrupo, PDO::PARAM_INT);
+		$stmt->bindParam(":idmateria", $idmateria, PDO::PARAM_INT);
+		$stmt->execute();
+
+		return $stmt->fetchAll();
+	}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 		#vistaMateriasXAlumnoModel
 	#-------------------------------------
 	#Obtiene las alumnos de toda la tabla
 	public function vistaMateriaXAlumnoModel($idmateria, $idalumno){
-		echo $idmateria;
-		echo $idalumno;
+	
 		$stmt = Conexion::conectar()->prepare("SELECT * FROM materias_alumnos where idmateria=:id AND idalumno=:matricula");
 
 		$stmt->bindParam(":id", $idmateria, PDO::PARAM_INT);
@@ -106,7 +177,7 @@ class Datos extends Conexion{
 	#BORRAR ALUMNOXMATERIA
 	#------------------------------------
 	public function borrarAlumnoXMateriaModel($datosModel){
-		$stmt = Conexion::conectar()->prepare("DELETE FROM materias_alumnos WHERE idalumno = :idalumno AND idmateria = :idmateria");
+		$stmt = Conexion::conectar()->prepare("DELETE FROM materias_alumnos WHERE idalumno=:idalumno AND idmateria=:idmateria");
 
 		$stmt->bindParam(":idalumno", $datosModel["id"], PDO::PARAM_INT);
 		$stmt->bindParam(":idmateria", $datosModel["idmateria"], PDO::PARAM_INT);
@@ -165,6 +236,21 @@ public function actualizarGrupoModel($datosModel, $tabla){
 		$stmt->close();
 	
 }
+
+	#BORRAR GRUPO
+	#-------------------------------------
+	public function borrarGrupoModel($datosModel){
+		$stmt = Conexion::conectar()->prepare("DELETE FROM grupos WHERE id = :id");
+		$stmt->bindParam(":id", $datosModel, PDO::PARAM_INT);
+
+		if($stmt->execute())
+			return "success";
+		else
+			return "error";
+
+		$stmt->close();
+
+	}
 
 	#VISTA MAESTROS MODEL
 	#-------------------------------------
@@ -259,6 +345,9 @@ public function actualizarGrupoModel($datosModel, $tabla){
 		$stmt->close();
 
 	}
+
+
+
 
 		#REGISTRO DE MATERIA
 	#-------------------------------------
@@ -376,16 +465,20 @@ public function actualizarGrupoModel($datosModel, $tabla){
 	#BORRAR MAESTRO
 	#------------------------------------
 	public function borrarMaestroModel($datosModel, $tabla){
-		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE num_empleado = :num_empleado");
-		$stmt->bindParam(":num_empleado", $datosModel, PDO::PARAM_STR);
 
-		if($stmt->execute())
-			return "success";
-		else
-			return "error";
-
-		$stmt->close();
-
+		
+			
+			$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE num_empleado = :num_empleado");
+						$stmt->bindParam(":num_empleado", $datosModel, PDO::PARAM_STR);
+			
+						if($stmt->execute())
+							return "success";
+						else
+							return "error";
+			
+						$stmt->close();
+		
+			
 	}
 
 	#REGISTRO DE MAESTROS

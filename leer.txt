@@ -5,7 +5,23 @@ Nombre:		tutorias
 Cuentas guardadas en el sistema con valores de prueba:
 
 usuario:	superusuario@upv.edu.mx
-contraseña:	superusuario
+contraseña:
 
-usuario:	maestro@upv.edu.mx
+
+
+<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&idmateria='.$id.' &cambio=Yes &idcarrera='.$idcarrera.' &id='.$id.'" ><button class="small warning" ';
+
+
+
+
+
+
+
+
+
+
+
+	superusuario
+
+ usuario:	maestro@upv.edu.mx
 contraseña:	maestro

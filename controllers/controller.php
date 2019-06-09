@@ -53,6 +53,165 @@ class MvcController{
 			</tr>';
 		}
 	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	#VISTA DE MATERIAS
+	#------------------------------------
+	#Genera la interfaz que muestra en una tabla todos los registros almacenados
+
+	public function vistaAgregarMateriaController(){
+			$id=$_GET["id"];
+			$idcarrera=$_GET["idcarrera"];
+			$respuesta = Datos::vistaMateriasXGrupoModel("materias");
+		
+		foreach($respuesta as $row => $item){
+
+			$respuestaMateriaXAlumno = Datos::vistaMateriaAñadModel($id,$item["id"]);
+			// $respuestaMateriaXAlumno = Datos::vistaMateriaXAlumnoModel(98742,1530012);
+			$revisar=sizeof($respuestaMateriaXAlumno);
+
+
+
+			
+
+           $nombreCarrera=Datos::ObtenerCarrera($item["idcarrera"]); 
+           $nombreMaestro=Datos::ObtenerMaestro($item["idmaestro"]);
+
+ 
+		echo'<tr>';
+
+			if(sizeof($respuestaMateriaXAlumno) == 1)
+			{
+				echo'<td><h4 align="center"><i class="fa fa-check-square"></h4></td>';
+		
+			}else
+			{
+				echo'<td><h4 align="center"><i class="fa fa-square"></h4></td>';
+			}
+			echo '
+
+
+
+				<td>'.$item["nombre"].'</td>
+				<td>'.$nombreCarrera["nombre"].'</td>
+				<td>'.$nombreMaestro["nombre"].'</td>
+               
+
+                <td><a href="index.php?action=agregar_materia&idmateria='.$item["id"].'&idgrupo='.$id.'&idcarrera='.$idcarrera.'&id='.$_GET["id"].'&cambio=Yes" ><button class="small warning" ';
+				if ($revisar == 1)
+					echo 'disabled="true"';
+
+				echo ' >Agregar</button></a></td>
+
+
+
+				
+
+
+				<td><a href="index.php?action=agregar_materia&idmateria='.$item["id"].'&idgrupo='.$id.'&idcarrera='.$idcarrera.'&id='.$_GET["id"].'&cambio=No" ><button class="small alert" ';
+
+                 if ($revisar == 0)
+					echo 'disabled="true"';
+
+				echo '>Borrar</button></a></td>
+
+
+
+
+			</tr>';
+		}
+	
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public function vistaAgregarAlumnoControllerr(){
+		$id = $_GET["id"];
+		$idcarrera = $_GET["idcarrera"];
+		
+
+		$respuesta = Datos::vistaAlumnosXCarreraModel($idcarrera);
+		foreach($respuesta as $row => $item){
+			$respuestaMateriaXAlumno = Datos::vistaMateriaXAlumnoModel($id,$item["matricula"]);
+			// $respuestaMateriaXAlumno = Datos::vistaMateriaXAlumnoModel(98742,1530012);
+			$revisar=sizeof($respuestaMateriaXAlumno);
+			if(sizeof($respuestaMateriaXAlumno) == 1)
+			{
+				echo'<tr> <td><i class="fa-li fa fa-check-square"></td>';
+		
+			}else
+			{
+				echo'<tr> <td><i class="fa-li fa fa-square"></td>';
+			}				
+		echo '		
+				<td>'.$item["nombre"].'</td>
+				<td>'.$item["id_carrera"].'</td>
+
+                
+				<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&id='.$id.' &cambio=Yes&idcarrera='.$idcarrera.'" ><button class="small warning" ';
+				if ($revisar == 1)
+					echo 'disabled="true"';
+
+				echo ' >Agregar</button></a></td>
+
+                
+				<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&id='.$id.' &cambio=No&idcarrera='.$idcarrera.'" ><button class="small alert" ';
+
+                 if ($revisar == 0)
+					echo 'disabled="true"';
+
+				echo '>Borrar</button></a></td>
+
+
+
+			</tr>';
+		}
+	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #Registro de materia en grupo
+	#------------------------------------
+	#Permite hacer un registro de una materia en la bd.
+		public function registroMateriaXGrupoController(){
+			    
+			$datosController = array( "idgrupo"=>$_GET["idgrupo"], 
+								      "idmateria"=>$_GET["idmateria"]
+								  );
+			$respuesta = Datos::registroMateriaXGrupoModel($datosController);
+
+
+			if($respuesta == "success"){
+			header('location:index.php?action=agregar_materia&id='.$_GET["id"].'&idcarrera='.$_GET["idcarrera"].'  ');
+			}
+			else{
+			header("location:index.php");
+			}
+		
+	}
+
+
+
+		#BORRAR MATERIA DE GRUPO
+	#------------------------------------
+	#Permite el borrado de un alumno de la base de datos.
+	public function borrarMateriaXGrupoController(){
+
+
+
+			$datosController = array( "id"=>$_GET["idgrupo"], 
+								      "idmateria"=>$_GET["idmateria"]);
+
+			$respuesta = Datos::borrarMateriaXGrupoModel($datosController);
+             
+
+
+			if($respuesta == "success"){
+				header('location:index.php?action=agregar_materia&id='.$_GET["id"].'&idcarrera='.$_GET["idcarrera"].'');
+			}else{
+				echo('<script> alert("El alumno no pudo ser eliminado, debido a que existen elementos dependientes a el, elimine primero esos elementos."); </script>');
+			}
+		
+	}
+
+
 
 
     #Registro de alumno en materia
@@ -82,7 +241,7 @@ class MvcController{
 	#Permite el borrado de un alumno de la base de datos.
 	public function borrarAlumnoXMateriaController(){
 
-
+			echo "Hola";
 
 			$datosController = array( "id"=>$_GET["matricula"], 
 								      "idmateria"=>$_GET["id"]);
@@ -111,10 +270,17 @@ class MvcController{
            $nombreCarrera=Datos::ObtenerCarrera($item["idcarrera"]); 
 
 		echo'<tr>
+
+
 				<td>'.$item["id"].'</td>
 				<td>'.$nombreCarrera["nombre"].'</td>
 				
+
+				<td><a href="index.php?action=agregar_materia&id='.$item["id"].'&idcarrera='.$nombreCarrera["id"].'"><button class="small success">Agregar Materias</button></a></td>
+
+
 				<td><a href="index.php?action=editar_grupo&id='.$item["id"].'"><button class="small warning">Editar</button></a></td>
+
 				<td><a href="index.php?action=intGrupos&idBorrar='.$item["id"].'"><button class="small alert">Borrar</button></a></td>
 			</tr>';
 		}
@@ -160,7 +326,7 @@ class MvcController{
 		if(isset($_POST["id"])){
 			$datosController = array( "id"=>$_GET["id"], 
 								      "id_carrera"=>$_POST["id_carrera"]);
-			print_r( $datosController);
+		
 			$respuesta = Datos::actualizarGrupoModel($datosController, "grupos");
 
 			 if($respuesta == "success"){
@@ -182,7 +348,7 @@ class MvcController{
 
 		if(isset($_GET["idBorrar"])){
 			$datosController = $_GET["idBorrar"];
-			$respuesta = Datos::borrarMateriaModel($datosController);
+			$respuesta = Datos::borrarGrupoModel($datosController);
 			
 			
 			if($respuesta == "success"){
@@ -245,7 +411,7 @@ public function editarBaseMateriasController(){
 								      "nombre"=>$_POST["nombre"],
 								      "id_carrera"=>$_POST["id_carrera"],
 								  	  "num_maestro"=>$_POST["num_maestro"]);
-			print_r( $datosController);
+	
 			$respuesta = Datos::actualizarMateriaModel($datosController, "materias");
 
 			 if($respuesta == "success"){
@@ -752,27 +918,28 @@ $st_maestros="";
 			$respuestaMateriaXAlumno = Datos::vistaMateriaXAlumnoModel($id,$item["matricula"]);
 			// $respuestaMateriaXAlumno = Datos::vistaMateriaXAlumnoModel(98742,1530012);
 			$revisar=sizeof($respuestaMateriaXAlumno);
+			echo '<tr>';
 			if(sizeof($respuestaMateriaXAlumno) == 1)
 			{
-				echo'<tr> <td><i class="fa-li fa fa-check-square"></td>';
+				echo'<td><h4 align="center"><i class="fa fa-check-square"></h4></td>';
 		
 			}else
 			{
-				echo'<tr> <td><i class="fa-li fa fa-square"></td>';
+				echo'<td><h4 align="center"><i class="fa fa-square"></h4></td>';
 			}				
 		echo '		
 				<td>'.$item["nombre"].'</td>
 				<td>'.$item["id_carrera"].'</td>
 
                 
-				<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&id='.$id.' &cambio=Yes&idcarrera='.$idcarrera.'" ><button class="small warning" ';
+				<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&id='.$id.'&cambio=Yes&idcarrera='.$idcarrera.'" ><button class="small warning" ';
 				if ($revisar == 1)
 					echo 'disabled="true"';
 
 				echo ' >Agregar</button></a></td>
 
                 
-				<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&id='.$id.' &cambio=No&idcarrera='.$idcarrera.'" ><button class="small alert" ';
+				<td><a href="index.php?action=agregar_alumno&matricula='.$item["matricula"].'&id='.$id.'&cambio=No&idcarrera='.$idcarrera.'" ><button class="small alert" ';
 
                  if ($revisar == 0)
 					echo 'disabled="true"';

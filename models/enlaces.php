@@ -5,7 +5,7 @@ class Paginas{
 	public function enlacesPaginasModel($enlaces){
 
 
-		if($enlaces == "reportes" || $enlaces == "registro_alumno" || $enlaces == "registro_tutoria" ||  $enlaces == "registro_maestro" || $enlaces == "registro_carrera" || $enlaces == "ingresar" || $enlaces == "maestros" || $enlaces == "carreras" || $enlaces == "tutorias" || $enlaces == "alumnos" || $enlaces == "editar_carreras" || $enlaces == "editar_tutoria" || $enlaces == "editar_maestro" || $enlaces == "editar_alumnos" || $enlaces == "salir" || $enlaces == "grupos" || $enlaces == "materias" || $enlaces =="intMaterias" || $enlaces =="editar_materia" || $enlaces =="intGrupos" || $enlaces =="grupos" || $enlaces =="editar_grupo" || $enlaces =="agregar_alumno" ){
+		if($enlaces == "reportes" || $enlaces == "registro_alumno" || $enlaces == "registro_tutoria" ||  $enlaces == "registro_maestro" || $enlaces == "registro_carrera" || $enlaces == "ingresar" || $enlaces == "maestros" || $enlaces == "carreras" || $enlaces == "tutorias" || $enlaces == "alumnos" || $enlaces == "editar_carreras" || $enlaces == "editar_tutoria" || $enlaces == "editar_maestro" || $enlaces == "editar_alumnos" || $enlaces == "salir" || $enlaces == "grupos" || $enlaces == "materias" || $enlaces =="intMaterias" || $enlaces =="editar_materia" || $enlaces =="intGrupos" || $enlaces =="grupos" || $enlaces =="editar_grupo" || $enlaces =="agregar_alumno" || $enlaces =="agregar_materia"){
 
 			$module =  "views/modules/".$enlaces.".php";
 		}
